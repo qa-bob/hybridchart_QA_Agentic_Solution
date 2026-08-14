@@ -1,3 +1,10 @@
+---
+name: test-generator
+description: Reads a populated site.config.json and generates site-specific Playwright test files (POM-compliant) beyond the shared generic suites. Use when a site has unique functionality, the client requests extra coverage, generic selectors fail, or when writing a regression test for a discovered bug.
+tools: Read, Write, Edit, Glob, Grep, Bash
+model: sonnet
+---
+
 # Agent: test-generator
 
 ## Role

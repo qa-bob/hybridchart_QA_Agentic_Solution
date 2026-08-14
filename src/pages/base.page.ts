@@ -7,7 +7,13 @@
  */
 
 import { type Page, type Locator } from '@playwright/test';
-import type { SiteConfig } from '@types/site-config.types';
+// NOTE: TypeScript's compiler special-cases any bare import specifier that
+// starts with "@types/" (it assumes an npm @types/* scoped package and
+// raises TS6137 "Cannot import type declaration files"), even though the
+// tsconfig "@types/*" path alias correctly maps here to src/types/*. This is
+// a pre-existing tsconfig alias/tsc naming collision — using a relative
+// import for this one file is the minimal, safe workaround.
+import type { SiteConfig } from '../types/site-config.types';
 
 export class BasePage {
   readonly page: Page;
@@ -25,6 +31,16 @@ export class BasePage {
   /** Navigate to the site root URL. */
   async navigate(): Promise<void> {
     await this.page.goto(this.url, { waitUntil: 'domcontentloaded' });
+  }
+
+  /**
+   * Navigate to a path relative to the configured site root (e.g. "/faq/").
+   * Subclasses representing a single distinct page use this from an
+   * overridden `navigate()` so callers never hardcode the base URL.
+   */
+  async goToPath(pathname: string): Promise<void> {
+    const target = new URL(pathname, this.url).toString();
+    await this.page.goto(target, { waitUntil: 'domcontentloaded' });
   }
 
   /** Wait until network activity has settled. */
@@ -101,5 +117,25 @@ export class BasePage {
   async getFormElements(): Promise<Locator[]> {
     const locator = this.page.locator('form');
     return locator.all();
+  }
+
+  // ── Demo request CTA ─────────────────────────────────────────────────────────
+
+  /**
+   * Return all "Book a Demo" style call-to-action links found on the current
+   * page. Many B2B SaaS marketing sites (including this one) route this CTA
+   * to a third-party scheduling tool, so this looks for both the external
+   * booking-tool href pattern and common CTA text as a fallback.
+   */
+  async getDemoRequestLinks(): Promise<Locator[]> {
+    const byHref = this.page.locator(
+      'a[href*="appointlet" i], a[href*="calendly" i], a[href*="hubspot" i][href*="meetings" i]'
+    );
+    if (await byHref.count() > 0) return byHref.all();
+
+    const byText = this.page.locator('a, button').filter({
+      hasText: /book a demo|schedule.*demo|request a demo|free demonstration/i,
+    });
+    return byText.all();
   }
 }

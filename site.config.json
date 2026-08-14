@@ -1,11 +1,17 @@
 ﻿{
     "name":  "HybridChart",
     "url":  "http://hybridchart.com",
-    "description":  "",
-    "industry":  "",
+    "description":  "HybridChart is a mobile physician rounding, charge capture, and workflow optimization platform (EVOLVE, ALTITUDE, SWITCHBOARD) built by physicians to help doctors and medical groups capture every charge, streamline hospital rounding, and improve patient follow-up.",
+    "industry":  "Healthcare Technology / B2B SaaS (Physician Rounding & Revenue Cycle Management)",
     "hasContactForm":  true,
     "expectedNavItems":  [
-
+                             "Challenges",
+                             "Products",
+                             "Who It's For",
+                             "Resources",
+                             "About",
+                             "Contact Us",
+                             "Log In"
                          ],
     "viewports":  [
                       "desktop",
