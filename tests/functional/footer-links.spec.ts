@@ -43,10 +43,7 @@ test.describe('Footer @functional', () => {
   test('all footer links are reachable (no 404s) @functional', async ({ footerPage }) => {
     const results = await footerPage.checkAllFooterLinksReachable();
 
-    if (results.length === 0) {
-      console.warn('[footer] No checkable footer links found — skipping reachability assertion.');
-      return;
-    }
+    test.skip(results.length === 0, 'No checkable footer links found');
 
     const broken = results.filter((r) => !r.ok && r.status !== 0);
     const unreachable = results.filter((r) => r.status === 0);

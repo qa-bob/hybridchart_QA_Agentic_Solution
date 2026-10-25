@@ -10,10 +10,7 @@
  */
 
 import { test as base, expect } from '@playwright/test';
-// NOTE: the "@types/*" tsconfig path alias collides with TypeScript's
-// special-case handling of "@types/" import specifiers (TS6137). See the
-// matching note in src/pages/base.page.ts — using a relative import here too.
-import { loadSiteConfig, type SiteConfig } from '../types/site-config.types';
+import { loadSiteConfig, type SiteConfig } from '@site-types/site-config.types';
 import { HomePage } from '@pages/home.page';
 import { NavigationPage } from '@pages/navigation.page';
 import { ContactFormPage } from '@pages/contact.page';
