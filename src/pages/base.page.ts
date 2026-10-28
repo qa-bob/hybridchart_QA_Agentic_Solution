@@ -7,13 +7,7 @@
  */
 
 import { type Page, type Locator } from '@playwright/test';
-// NOTE: TypeScript's compiler special-cases any bare import specifier that
-// starts with "@types/" (it assumes an npm @types/* scoped package and
-// raises TS6137 "Cannot import type declaration files"), even though the
-// tsconfig "@types/*" path alias correctly maps here to src/types/*. This is
-// a pre-existing tsconfig alias/tsc naming collision — using a relative
-// import for this one file is the minimal, safe workaround.
-import type { SiteConfig } from '../types/site-config.types';
+import type { SiteConfig } from '@site-types/site-config.types';
 
 export class BasePage {
   readonly page: Page;
@@ -43,9 +37,9 @@ export class BasePage {
     await this.page.goto(target, { waitUntil: 'domcontentloaded' });
   }
 
-  /** Wait until network activity has settled. */
+  /** Wait until the page and its subresources have loaded. */
   async waitForLoad(): Promise<void> {
-    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForLoadState('load');
   }
 
   // ── Page metadata ───────────────────────────────────────────────────────────
